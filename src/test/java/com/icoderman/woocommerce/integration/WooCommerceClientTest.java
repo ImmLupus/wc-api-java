@@ -1,6 +1,7 @@
 package com.icoderman.woocommerce.integration;
 
 
+import com.fasterxml.jackson.databind.Module.SetupContext;
 import com.icoderman.woocommerce.ApiVersionType;
 import com.icoderman.woocommerce.EndpointBaseType;
 import com.icoderman.woocommerce.WooCommerce;
@@ -18,9 +19,9 @@ import java.util.Map;
 
 public class WooCommerceClientTest {
 
-    private static final String CONSUMER_KEY = "ck_d35e7be7cc695d87f23490729dd80e173f88c8f5";
-    private static final String CONSUMER_SECRET = "cs_53a835760712ebf0c8bcf2a21197af4b2323a052";
-    private static final String WC_URL = "http://localhost/index.php";
+    private static final String CONSUMER_KEY = "ck_bf2f38bf4c72ff1fd28bdb8e2b3e694314c894d1";
+    private static final String CONSUMER_SECRET = "cs_2ed801ca381abbafa2d38d43e202dc4a4a0c72cc";
+    private static final String WC_URL = "http://aptekawatson.ru";
 
     private WooCommerce wooCommerce;
 
@@ -43,12 +44,13 @@ public class WooCommerceClientTest {
 
     @Ignore
     @Test
-    public void apiGetAllProductsTest() {
+    public List apiGetAllProductsTest() {
         Map<String, String> params = new HashMap<>();
         params.put("per_page","100");
         params.put("offset","0");
         Object products = wooCommerce.getAll(EndpointBaseType.PRODUCTS.getValue(), params);
         Assert.assertNotNull(products);
+        return (List)products;
     }
 
     @Ignore
