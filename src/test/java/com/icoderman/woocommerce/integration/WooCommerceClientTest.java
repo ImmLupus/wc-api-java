@@ -32,12 +32,7 @@ public class WooCommerceClientTest {
 
     @Ignore
     @Test
-    public void apiCreateProductTest() {
-        Map<String, Object> productInfo = new HashMap<>();
-        productInfo.put("name", "Premium Quality");
-        productInfo.put("type", "simple");
-        productInfo.put("regular_price", "21.99");
-        productInfo.put("description", "Pellentesque habitant morbi tristique senectus et netus");
+    public void apiCreateProductTest(Map<String, Object> productInfo) {
         Map product = wooCommerce.create(EndpointBaseType.PRODUCTS.getValue(), productInfo);
         Assert.assertNotNull(product);
     }
@@ -46,7 +41,7 @@ public class WooCommerceClientTest {
     @Test
     public List apiGetAllProductsTest() {
         Map<String, String> params = new HashMap<>();
-        params.put("per_page","100");
+        params.put("per_page","1000");
         params.put("offset","0");
         Object products = wooCommerce.getAll(EndpointBaseType.PRODUCTS.getValue(), params);
         Assert.assertNotNull(products);
@@ -62,9 +57,7 @@ public class WooCommerceClientTest {
 
     @Ignore
     @Test
-    public void apiUpdateProductTest() {
-        Map<String, Object> productInfo = new HashMap<>();
-        productInfo.put("name", "Premium Quality UPDATED");
+    public void apiUpdateProductTest(Map<String, Object> productInfo) {
         Map product = wooCommerce.update(EndpointBaseType.PRODUCTS.getValue(), 10, productInfo);
         Assert.assertNotNull(product);
     }
@@ -98,16 +91,18 @@ public class WooCommerceClientTest {
 
     @Ignore
     @Test
-    public void apiBatchProductTest() {
+    public void apiBatchProductTest(Map<String, Object> reqOptions) {
 
-        List<Map<String, Object>> products = new ArrayList<>();
+        /*List<Map<String, Object>> products = new ArrayList<>();
         Map<String, Object> product = new HashMap<>();
         product.put("id", "19916");
         product.put("name", "MODIFIED NAME");
         products.add(product);
 
         Map<String, Object> reqOptions = new HashMap<>();
-        reqOptions.put("update", products);
+        reqOptions.put("update", products);*/
+    	
+    	
 
         Map response = wooCommerce.batch(EndpointBaseType.PRODUCTS.getValue(), reqOptions);
         Assert.assertNotNull(response);
