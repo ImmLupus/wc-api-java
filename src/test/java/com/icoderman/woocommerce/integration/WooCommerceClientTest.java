@@ -100,9 +100,7 @@ public class WooCommerceClientTest {
 		 * Map<String, Object> reqOptions = new HashMap<>(); reqOptions.put("update",
 		 * products);
 		 */
-
 		wooCommerce.batch(EndpointBaseType.PRODUCTS.getValue(), reqOptions);
 		// Assert.assertNotNull(response);
 	}
-
 }

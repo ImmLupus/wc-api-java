@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -61,7 +62,14 @@ public class Test_farmnet {
 			for (LinkedHashMap item : (List<LinkedHashMap>) branch.get("items")) {
 				LinkedHashMap ost = ostByDate(token, Integer.toString((int) item.get("branchId")));
 				for (LinkedHashMap ost_item : (List<LinkedHashMap>) ost.get("items")) {
-					item_map.put(Integer.toString((Integer) ost_item.get("regId")), ost_item);
+					// Если в прошлом филиале такой товар был, суммируем остатки
+					String id = Integer.toString((Integer) ost_item.get("regId"));
+					if (!item_map.containsKey(id))
+						item_map.put(id, ost_item);
+					else {
+						item_map.get(id).put("uQntOst", (double) (item_map.get(id).get("uQntOst"))
+								+ ((double) ost_item.get("uQntOst")));
+					}
 				}
 			}
 
@@ -70,9 +78,6 @@ public class Test_farmnet {
 			for (LinkedHashMap item : wooAllProducts) {
 				woo_item_map.put((String) item.get("sku"), item);
 			}
-
-			if (wooAllProducts.isEmpty())
-				wooAllProducts = new ArrayList<LinkedHashMap>();
 
 			// Сравниваем две таблицы и заполняем запрос на запись
 			int count = 0;
@@ -85,8 +90,9 @@ public class Test_farmnet {
 					product.put("sku", item_map.get(key).get("regId"));
 					product.put("name", item_map.get(key).get("tovName"));
 					product.put("short_description", item_map.get(key).get("fabr"));
-					product.put("stock_quantity", item_map.get(key).get("uQntOst"));
+					product.put("stock_quantity", (int) ((double) item_map.get(key).get("uQntOst")));
 					product.put("regular_price", item_map.get(key).get("priceRoznWNDS"));
+					product.put("manage_stock", "true");
 
 					update_list.add(product);
 				} else {
@@ -94,8 +100,9 @@ public class Test_farmnet {
 					product.put("sku", item_map.get(key).get("regId"));
 					product.put("name", item_map.get(key).get("tovName"));
 					product.put("short_description", item_map.get(key).get("fabr"));
-					product.put("stock_quantity", item_map.get(key).get("uQntOst"));
+					product.put("stock_quantity", (int) ((double) item_map.get(key).get("uQntOst")));
 					product.put("regular_price", item_map.get(key).get("priceRoznWNDS"));
+					product.put("manage_stock", "true");
 
 					create_list.add(product);
 				}
@@ -107,7 +114,11 @@ public class Test_farmnet {
 					if (!update_list.isEmpty())
 						reqOptions.put("update", update_list);
 
-					wooBatchProduct(reqOptions);
+					try {
+						wooBatchProduct(reqOptions);
+					} catch (Exception nohttp) {
+						wooBatchProduct(reqOptions);
+					}
 
 					count = 0;
 					create_list.clear();
@@ -122,7 +133,11 @@ public class Test_farmnet {
 			if (!update_list.isEmpty())
 				reqOptions.put("update", update_list);
 
-			wooBatchProduct(reqOptions);
+			try {
+				wooBatchProduct(reqOptions);
+			} catch (Exception nohttp) {
+				wooBatchProduct(reqOptions);
+			}
 		}
 	}
 
