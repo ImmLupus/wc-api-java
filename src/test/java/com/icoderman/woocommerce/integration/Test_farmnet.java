@@ -67,8 +67,8 @@ public class Test_farmnet {
 					if (!item_map.containsKey(id))
 						item_map.put(id, ost_item);
 					else {
-						item_map.get(id).put("uQntOst", (double) (item_map.get(id).get("uQntOst"))
-								+ ((double) ost_item.get("uQntOst")));
+						item_map.get(id).put("uQntOst",
+								(double) (item_map.get(id).get("uQntOst")) + ((double) ost_item.get("uQntOst")));
 					}
 				}
 			}
@@ -93,6 +93,7 @@ public class Test_farmnet {
 					product.put("stock_quantity", (int) ((double) item_map.get(key).get("uQntOst")));
 					product.put("regular_price", item_map.get(key).get("priceRoznWNDS"));
 					product.put("manage_stock", "true");
+					product.put("id", woo_item_map.get(key).get("id"));
 
 					update_list.add(product);
 				} else {
@@ -114,11 +115,7 @@ public class Test_farmnet {
 					if (!update_list.isEmpty())
 						reqOptions.put("update", update_list);
 
-					try {
-						wooBatchProduct(reqOptions);
-					} catch (Exception nohttp) {
-						wooBatchProduct(reqOptions);
-					}
+					wooBatchProduct(reqOptions);
 
 					count = 0;
 					create_list.clear();
@@ -133,11 +130,7 @@ public class Test_farmnet {
 			if (!update_list.isEmpty())
 				reqOptions.put("update", update_list);
 
-			try {
-				wooBatchProduct(reqOptions);
-			} catch (Exception nohttp) {
-				wooBatchProduct(reqOptions);
-			}
+			wooBatchProduct(reqOptions);
 		}
 	}
 
@@ -304,6 +297,7 @@ public class Test_farmnet {
 			woo.apiBatchProductTest(reqOptions);
 		} catch (Exception e) {
 			e.printStackTrace();
+			woo.apiBatchProductTest(reqOptions);
 		}
 	}
 
