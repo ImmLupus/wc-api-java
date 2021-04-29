@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,7 +12,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -34,10 +34,13 @@ public class Test_farmnet {
 	static HashMap<String, String> users = new LinkedHashMap<String, String>();
 
 	public static void main(String[] args) throws ClientProtocolException, IOException {
+		
+		System.out.println(new Date().toString());
 
 		woo = new WooCommerceClientTest();
 		woo.setUp();
 
+		// Получаем список логинов
 		try {
 			FileInputStream fis = new FileInputStream("users");
 			Scanner sc = new Scanner(fis);
@@ -147,7 +150,7 @@ public class Test_farmnet {
 			CloseableHttpResponse response = httpClient.execute(request);
 
 			try {
-				System.out.println(response.getStatusLine().toString());
+				System.out.println("Login: " + response.getStatusLine().toString());
 
 				HttpEntity entity = response.getEntity();
 				if (entity != null) {
@@ -183,7 +186,7 @@ public class Test_farmnet {
 			CloseableHttpResponse response = httpClient.execute(request);
 
 			try {
-				System.out.println(response.getStatusLine().toString());
+				System.out.println("sprGoods: " + response.getStatusLine().toString());
 
 				HttpEntity entity = response.getEntity();
 				if (entity != null) {
@@ -217,7 +220,7 @@ public class Test_farmnet {
 			CloseableHttpResponse response = httpClient.execute(request);
 
 			try {
-				System.out.println(response.getStatusLine().toString());
+				System.out.println("branchList: " + response.getStatusLine().toString());
 
 				HttpEntity entity = response.getEntity();
 				if (entity != null) {
@@ -254,7 +257,7 @@ public class Test_farmnet {
 			CloseableHttpResponse response = httpClient.execute(request);
 
 			try {
-				System.out.println(response.getStatusLine().toString());
+				System.out.println("ostByDate: " + response.getStatusLine().toString());
 
 				HttpEntity entity = response.getEntity();
 				if (entity != null) {
@@ -296,7 +299,8 @@ public class Test_farmnet {
 		try {
 			woo.apiBatchProductTest(reqOptions);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			System.out.println("Try again:");
 			woo.apiBatchProductTest(reqOptions);
 		}
 	}
